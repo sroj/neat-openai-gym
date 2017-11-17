@@ -6,7 +6,7 @@ from gym import envs
 # Load configuration.
 config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                      neat.DefaultSpeciesSet, neat.DefaultStagnation,
-                     'config-feedforward')
+                     'config-mountain-car')
 
 # Create the population, which is the top-level object for a NEAT run.
 p = neat.Population(config)
@@ -14,7 +14,7 @@ p = neat.Population(config)
 # Add a stdout reporter to show progress in the terminal.
 p.add_reporter(neat.StdOutReporter(False))
 
-env = gym.make('CartPole-v1')
+env = gym.make('MountainCarContinuous-v0')
 
 
 def eval_genomes(genomes, config):
