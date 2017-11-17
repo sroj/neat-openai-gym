@@ -1,7 +1,6 @@
 import gym
 import neat
-import numpy as np
-from gym import envs
+from neat.parallel import ParallelEvaluator
 
 # Load configuration.
 config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
@@ -17,36 +16,7 @@ p.add_reporter(neat.StdOutReporter(False))
 env = gym.make('MountainCarContinuous-v0')
 
 n = 100
-t_steps = 5000
-
-
-def eval_genomes(genomes, config):
-    for genome_id, genome in genomes:
-        genome.fitness = 1.0
-        net = neat.nn.FeedForwardNetwork.create(genome, config)
-
-        for i_episode in range(1):
-            # print("--> Starting new episode")
-            observation = env.reset()
-
-            action = eval_network(net, observation)
-
-            for t in range(t_steps):
-
-                # env.render()
-
-                observation, reward, done, info = env.step(action)
-
-                # print("\t Reward {}: {}".format(t, reward))
-                # print("\t Action {}: {}".format(t, action))
-
-                action = eval_network(net, observation)
-
-                genome.fitness += reward
-
-                if done:
-                    # print("<-- Episode finished after {} timesteps with reward {}".format(t + 1, genome.fitness))
-                    break
+t_steps = 10000
 
 
 def eval_network(net, net_input):
@@ -57,6 +27,69 @@ def eval_network(net, net_input):
     assert (result[0] >= -1.0 or result[0] <= 1.0)
 
     return result
+
+
+def eval_single_genome(genome, genome_config):
+    net = neat.nn.FeedForwardNetwork.create(genome, genome_config)
+
+    total_reward = 0.0
+
+    # print("--> Starting new episode")
+    observation = env.reset()
+
+    action = eval_network(net, observation)
+
+    for t in range(t_steps):
+
+        # env.render()
+
+        observation, reward, done, info = env.step(action)
+
+        # print("\t Reward {}: {}".format(t, reward))
+        # print("\t Action {}: {}".format(t, action))
+
+        action = eval_network(net, observation)
+
+        total_reward += reward
+
+        if done:
+            # print("<-- Episode finished after {} timesteps with reward {}".format(t + 1, genome.fitness))
+            break
+
+    return total_reward
+
+
+parallelEvaluator = ParallelEvaluator(num_workers=4, eval_function=eval_single_genome)
+
+
+def eval_genomes(genomes, neat_config):
+    parallelEvaluator.evaluate(genomes, neat_config)
+
+    # for genome_id, genome in genomes:
+    #     genome.fitness = 0.0
+    #     net = neat.nn.FeedForwardNetwork.create(genome, config)
+    #
+    #     # print("--> Starting new episode")
+    #     observation = env.reset()
+    #
+    #     action = eval_network(net, observation)
+    #
+    #     for t in range(t_steps):
+    #
+    #         # env.render()
+    #
+    #         observation, reward, done, info = env.step(action)
+    #
+    #         # print("\t Reward {}: {}".format(t, reward))
+    #         # print("\t Action {}: {}".format(t, action))
+    #
+    #         action = eval_network(net, observation)
+    #
+    #         genome.fitness += reward
+    #
+    #         if done:
+    #             # print("<-- Episode finished after {} timesteps with reward {}".format(t + 1, genome.fitness))
+    #             break
 
 
 def run_neat():
@@ -82,7 +115,7 @@ def run_neat():
 
         for t in range(t_steps):
 
-            env.render()
+            # env.render()
 
             observation, reward, done, info = env.step(action)
 
@@ -105,9 +138,6 @@ def run_neat():
 
 
 def main():
-    print("Available episodes are: ")
-    print(envs.registry.all())
-
     run_neat()
 
 
