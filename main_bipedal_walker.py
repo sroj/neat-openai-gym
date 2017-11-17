@@ -1,6 +1,5 @@
 import gym
 import neat
-import numpy as np
 from gym import envs
 
 # Load configuration.
@@ -17,7 +16,6 @@ p.add_reporter(neat.StdOutReporter(False))
 env = gym.make('BipedalWalker-v2')
 
 n = 100
-t_steps = 5000
 
 
 def eval_genomes(genomes, config):
@@ -25,38 +23,43 @@ def eval_genomes(genomes, config):
         genome.fitness = 1.0
         net = neat.nn.FeedForwardNetwork.create(genome, config)
 
-        for i_episode in range(1):
-            # print("--> Starting new episode")
-            observation = env.reset()
+        # print("--> Starting new episode")
+        observation = env.reset()
+
+        action = eval_network(net, observation)
+
+        done = False
+
+        t = 0
+
+        while not done:
+
+            env.render()
+
+            observation, reward, done, info = env.step(action)
+
+            # print("\t Reward {}: {}".format(t, reward))
+            # print("\t Action {}: {}".format(t, action))
 
             action = eval_network(net, observation)
 
-            for t in range(t_steps):
+            genome.fitness += reward
 
-                # env.render()
+            t += 1
 
-                observation, reward, done, info = env.step(action)
-
-                # print("\t Reward {}: {}".format(t, reward))
-                # print("\t Action {}: {}".format(t, action))
-
-                action = eval_network(net, observation)
-
-                genome.fitness += reward
-
-                if done:
-                    # print("<-- Episode finished after {} timesteps with reward {}".format(t + 1, genome.fitness))
-                    break
+            if done:
+                # print("<-- Episode finished after {} timesteps with reward {}".format(t + 1, genome.fitness))
+                pass
 
 
 def eval_network(net, net_input):
-    assert (len(net_input == 2))
+    # assert (len(net_input) == 24)
 
-    result = net.activate(net_input)
+    return net.activate(net_input)
 
-    assert (result[0] >= -1.0 or result[0] <= 1.0)
+    # assert (len(result) == 4)
 
-    return result
+    # assert (result[0] >= -1.0 or result[0] <= 1.0)
 
 
 def run_neat():
@@ -80,7 +83,11 @@ def run_neat():
 
         reward_episode = 0
 
-        for t in range(t_steps):
+        done = False
+
+        t = 0
+
+        while not done:
 
             env.render()
 
@@ -95,9 +102,11 @@ def run_neat():
 
             # print("\t Reward {}: {}".format(t, reward))
 
+            t += 1
+
             if done:
-                print("<-- Test episode done after {} time steps with reward {}".format(t + 1, reward_episode))
-                break
+                # print("<-- Test episode done after {} time steps with reward {}".format(t + 1, reward_episode))
+                pass
 
         avg_reward += reward_episode / n
 
