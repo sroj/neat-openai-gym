@@ -34,7 +34,7 @@ def eval_genomes(genomes, config):
 
         while not done:
 
-            env.render()
+            # env.render()
 
             observation, reward, done, info = env.step(action)
 
@@ -89,7 +89,7 @@ def run_neat():
 
         while not done:
 
-            env.render()
+            # env.render()
 
             observation, reward, done, info = env.step(action)
 
