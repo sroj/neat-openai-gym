@@ -1,7 +1,6 @@
 import gym
 import neat
 import numpy as np
-from gym import envs
 
 # Load configuration.
 config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
@@ -13,6 +12,11 @@ p = neat.Population(config)
 
 # Add a stdout reporter to show progress in the terminal.
 p.add_reporter(neat.StdOutReporter(False))
+
+stats = neat.StatisticsReporter()
+p.add_reporter(stats)
+
+p.add_reporter(neat.Checkpointer(10, 900))
 
 env = gym.make('CartPole-v1')
 
@@ -99,9 +103,6 @@ def run_neat():
 
 
 def main():
-    print("Available episodes are: ")
-    print(envs.registry.all())
-
     run_neat()
 
 

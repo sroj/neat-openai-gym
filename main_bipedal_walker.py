@@ -11,6 +11,11 @@ config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
 # Create the population, which is the top-level object for a NEAT run.
 p = neat.Population(config)
 
+stats = neat.StatisticsReporter()
+p.add_reporter(stats)
+
+p.add_reporter(neat.Checkpointer(10, 900))
+
 # Add a stdout reporter to show progress in the terminal.
 p.add_reporter(neat.StdOutReporter(False))
 
