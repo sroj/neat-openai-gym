@@ -14,7 +14,7 @@ p = neat.Population(config)
 stats = neat.StatisticsReporter()
 p.add_reporter(stats)
 
-p.add_reporter(neat.Checkpointer(10, 900))
+p.add_reporter(neat.Checkpointer(20, 900))
 
 # Add a stdout reporter to show progress in the terminal.
 p.add_reporter(neat.StdOutReporter(False))
@@ -72,7 +72,7 @@ def eval_single_genome(genome, genome_config):
     return total_reward
 
 
-parallelEvaluator = ParallelEvaluator(num_workers=8, eval_function=eval_single_genome)
+parallelEvaluator = ParallelEvaluator(num_workers=2, eval_function=eval_single_genome)
 
 
 def eval_genomes(genomes, neat_config):
@@ -163,9 +163,6 @@ def run_neat():
 
 
 def main():
-    print("Available episodes are: ")
-    print(envs.registry.all())
-
     run_neat()
 
 
