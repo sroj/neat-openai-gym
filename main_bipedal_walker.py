@@ -148,9 +148,9 @@ def parse_args():
     parser.add_argument('--checkpoint', nargs='?', default=None,
                         help='The filename for a checkpoint file to restart from')
 
-    parser.add_argument('--workers', nargs='?', default=NUM_WORKERS, help='How process workers to spawn')
+    parser.add_argument('--workers', nargs='?', default=NUM_WORKERS, type=int, help='How process workers to spawn')
 
-    parser.add_argument('--gi', nargs='?', default=CHECKPOINT_GENERATION_INTERVAL,
+    parser.add_argument('--gi', nargs='?', type=int, default=CHECKPOINT_GENERATION_INTERVAL,
                         help='Maximum number of generations between save intervals')
 
     parser.add_argument('--checkpoint-prefix', nargs='?', default=CHECKPOINT_PREFIX,
