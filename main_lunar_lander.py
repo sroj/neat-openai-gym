@@ -2,17 +2,18 @@ import argparse
 
 import gym
 import neat
+import numpy as np
 from neat.parallel import ParallelEvaluator
 
-env = gym.make('BipedalWalker-v2')
+env = gym.make('LunarLander-v2')
 
 n = 100
 t_steps = 10000
 
-CONFIG_FILE_NAME = 'config-bipedal-walker'
+CONFIG_FILE_NAME = 'config-lunar-lander'
 NUM_WORKERS = 1
 CHECKPOINT_GENERATION_INTERVAL = 20
-CHECKPOINT_PREFIX = 'checkpoint-bipedal-walker-'
+CHECKPOINT_PREFIX = 'checkpoint-lunar-lander-'
 
 config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                      neat.DefaultSpeciesSet, neat.DefaultStagnation,
@@ -20,7 +21,7 @@ config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
 
 
 def eval_network(net, net_input):
-    return net.activate(net_input)
+    return np.argmax(net.activate(net_input))
 
 
 def eval_single_genome(genome, genome_config):
@@ -148,7 +149,7 @@ def parse_args():
     parser.add_argument('--checkpoint', nargs='?', default=None,
                         help='The filename for a checkpoint file to restart from')
 
-    parser.add_argument('--workers', nargs='?', default=NUM_WORKERS, help='How process workers to spawn')
+    parser.add_argument('--workers', nargs='?', default=NUM_WORKERS, help='How many process workers to spawn')
 
     parser.add_argument('--gi', nargs='?', default=CHECKPOINT_GENERATION_INTERVAL,
                         help='Maximum number of generations between save intervals')
