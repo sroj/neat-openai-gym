@@ -4,6 +4,7 @@
 *.tar.gz
 *.sh
 neat-checkpoint-*
+source.tar
 
 # No Intellij stuff
 .idea/
