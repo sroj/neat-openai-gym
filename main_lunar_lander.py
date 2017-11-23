@@ -26,7 +26,7 @@ def eval_single_genome(genome, genome_config):
     for i in range(10):
         while not done:
 
-            # env.render()
+            # run_neat_base.env.render()
 
             observation, reward, done, info = run_neat_base.env.step(action)
 
