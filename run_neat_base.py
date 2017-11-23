@@ -5,6 +5,8 @@ import gym
 import neat
 from neat.parallel import ParallelEvaluator
 
+import datetime
+
 n = 100
 T_STEPS = 10000
 
@@ -133,6 +135,7 @@ def run(eval_network, eval_single_genome, environment_name, config_filename):
     global CONFIG_FILENAME
     global env
     global config
+    global CHECKPOINT_PREFIX
 
     ENVIRONMENT_NAME = environment_name
     CONFIG_FILENAME = config_filename
@@ -146,5 +149,9 @@ def run(eval_network, eval_single_genome, environment_name, config_filename):
     command_line_args = _parse_args()
 
     checkpoint = command_line_args.checkpoint
+
+    if CHECKPOINT_PREFIX is None:
+        timestamp = datetime.datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S')
+        CHECKPOINT_PREFIX = "cp_" + environment_name.lower() + "_" + timestamp
 
     _run_neat(checkpoint, eval_network, eval_single_genome)
