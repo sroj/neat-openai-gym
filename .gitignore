@@ -9,6 +9,8 @@ source.tar
 __pycache__/
 *.tar.gz_old
 
+*.cp
+
 # No Intellij stuff
 .idea/
 
