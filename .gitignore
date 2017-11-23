@@ -6,6 +6,9 @@
 neat-checkpoint-*
 source.tar
 
+__pycache__/
+*.tar.gz_old
+
 # No Intellij stuff
 .idea/
 
