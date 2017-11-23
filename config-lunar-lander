@@ -8,9 +8,9 @@ reset_on_extinction   = False
 
 [DefaultGenome]
 # node activation options
-activation_default      = sigmoid
+activation_default      = clamped
 activation_mutate_rate  = 0.0
-activation_options      = sigmoid
+activation_options      = clamped
 
 # node aggregation options
 aggregation_default     = sum
@@ -77,6 +77,6 @@ max_stagnation       = 20
 species_elitism      = 2
 
 [DefaultReproduction]
-elitism            = 2
+elitism            = 4
 survival_threshold = 0.2
 
