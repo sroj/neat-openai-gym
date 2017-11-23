@@ -75,7 +75,7 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
 
         while not done:
 
-            # env.render()
+            env.render()
 
             observation, reward, done, info = env.step(action)
 
@@ -91,7 +91,7 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
             t += 1
 
             if done:
-                # print("<-- Test episode done after {} time steps with reward {}".format(t + 1, reward_episode))
+                print("<-- Test episode done after {} time steps with reward {}".format(t + 1, reward_episode))
                 pass
 
         avg_reward += reward_episode / n
