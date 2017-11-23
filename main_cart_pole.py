@@ -10,7 +10,7 @@ def eval_single_genome(genome, genome_config):
     net = neat.nn.FeedForwardNetwork.create(genome, genome_config)
     total_reward = 0.0
 
-    for i_episode in range(n):
+    for i in range(n):
         # print("--> Starting new episode")
         observation = run_neat_base.env.reset()
 

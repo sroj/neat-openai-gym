@@ -3,6 +3,8 @@ import numpy as np
 
 import run_neat_base
 
+n = 10
+
 
 def eval_network(net, net_input):
     activation = net.activate(net_input)
@@ -11,19 +13,18 @@ def eval_network(net, net_input):
 
 def eval_single_genome(genome, genome_config):
     net = neat.nn.FeedForwardNetwork.create(genome, genome_config)
-
     total_reward = 0.0
 
-    # print("--> Starting new episode")
-    observation = run_neat_base.env.reset()
+    for i in range(n):
+        # print("--> Starting new episode")
+        observation = run_neat_base.env.reset()
 
-    action = eval_network(net, observation)
+        action = eval_network(net, observation)
 
-    done = False
+        done = False
 
-    t = 0
+        t = 0
 
-    for i in range(10):
         while not done:
 
             # run_neat_base.env.render()
@@ -43,7 +44,7 @@ def eval_single_genome(genome, genome_config):
                 # print("<-- Episode finished after {} timesteps with reward {}".format(t + 1, genome.fitness))
                 break
 
-    return total_reward / 10
+    return total_reward / n
 
 
 def main():

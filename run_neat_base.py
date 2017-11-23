@@ -61,8 +61,8 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
 
     avg_reward = 0
 
-    for i_episode in range(n):
-        print("--> Starting test episode trial {}".format(i_episode + 1))
+    for i in range(n):
+        print("--> Starting test episode trial {}".format(i + 1))
         observation = env.reset()
 
         action = eval_network(net, observation)
