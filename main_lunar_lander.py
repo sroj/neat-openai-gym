@@ -47,7 +47,10 @@ def eval_single_genome(genome, genome_config):
 
 
 def main():
-    run_neat_base.run(eval_network, eval_single_genome, "LunarLander-v2", "config-lunar-lander")
+    run_neat_base.run(eval_network,
+                      eval_single_genome,
+                      environment_name="LunarLander-v2",
+                      config_filename="config-lunar-lander")
 
 
 if __name__ == '__main__':
