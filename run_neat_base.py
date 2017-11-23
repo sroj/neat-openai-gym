@@ -1,13 +1,14 @@
 import argparse
+import datetime
 from functools import partial
 
 import gym
 import neat
 from neat.parallel import ParallelEvaluator
 
-import datetime
+n = 1
 
-n = 100
+test_n = 100
 T_STEPS = 10000
 
 ENVIRONMENT_NAME = None
@@ -23,8 +24,6 @@ config = None
 
 
 def _eval_genomes(eval_single_genome, genomes, neat_config):
-    print("Evaluating genomes")
-
     parallel_evaluator = ParallelEvaluator(NUM_WORKERS, eval_function=eval_single_genome)
 
     parallel_evaluator.evaluate(genomes, neat_config)
@@ -34,6 +33,7 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
     # Create the population, which is the top-level object for a NEAT run.
 
     print("Running with {} workers".format(NUM_WORKERS))
+    print("Running with {} episodes per genome".format(n))
     print("Running with checkpoint prefix: {}".format(CHECKPOINT_PREFIX))
 
     if checkpoint is not None:
@@ -61,7 +61,7 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
 
     avg_reward = 0
 
-    for i in range(n):
+    for i in range(test_n):
         print("--> Starting test episode trial {}".format(i + 1))
         observation = env.reset()
 
@@ -94,7 +94,7 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
                 print("<-- Test episode done after {} time steps with reward {}".format(t + 1, reward_episode))
                 pass
 
-        avg_reward += reward_episode / n
+        avg_reward += reward_episode / test_n
 
     print("Average reward was: {}".format(avg_reward))
 
@@ -103,6 +103,7 @@ def _parse_args():
     global NUM_WORKERS
     global CHECKPOINT_GENERATION_INTERVAL
     global CHECKPOINT_PREFIX
+    global n
 
     parser = argparse.ArgumentParser()
 
@@ -117,6 +118,8 @@ def _parse_args():
     parser.add_argument('--checkpoint-prefix', nargs='?', default=CHECKPOINT_PREFIX,
                         help='Prefix for the filename (the end will be the generation number)')
 
+    parser.add_argument('-n', nargs='?', type=int, default=n, help='Number of episodes to train on')
+
     command_line_args = parser.parse_args()
 
     NUM_WORKERS = command_line_args.workers
@@ -124,6 +127,8 @@ def _parse_args():
     CHECKPOINT_GENERATION_INTERVAL = command_line_args.gi
 
     CHECKPOINT_PREFIX = command_line_args.checkpoint_prefix
+
+    n = command_line_args.n
 
     return command_line_args
 
