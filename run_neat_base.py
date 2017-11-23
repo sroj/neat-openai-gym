@@ -150,6 +150,6 @@ def run(eval_network, eval_single_genome, environment_name, config_filename):
 
     if CHECKPOINT_PREFIX is None:
         timestamp = datetime.datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S')
-        CHECKPOINT_PREFIX = "cp_" + environment_name.lower() + "_" + timestamp + ".cp"
+        CHECKPOINT_PREFIX = "cp_" + environment_name.lower() + "_" + timestamp
 
     _run_neat(checkpoint, eval_network, eval_single_genome)

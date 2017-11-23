@@ -11,6 +11,8 @@ __pycache__/
 
 *.cp
 
+cp_*
+
 # No Intellij stuff
 .idea/
 
