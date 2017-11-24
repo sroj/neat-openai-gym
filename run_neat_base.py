@@ -22,6 +22,7 @@ CHECKPOINT_PREFIX = None
 SHOW_PLOTS = False
 
 PLOT_FILENAME_PREFIX = None
+MAX_GENS = None
 
 env = None
 
@@ -40,6 +41,7 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
     print("Running with {} workers".format(NUM_WORKERS))
     print("Running with {} episodes per genome".format(n))
     print("Running with checkpoint prefix: {}".format(CHECKPOINT_PREFIX))
+    print("Running with {} max generations".format(MAX_GENS))
 
     if checkpoint is not None:
         print("Resuming from checkpoint: {}".format(checkpoint))
@@ -57,7 +59,7 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
     p.add_reporter(neat.StdOutReporter(False))
 
     # Run until a solution is found.
-    winner = p.run(partial(_eval_genomes, eval_single_genome))
+    winner = p.run(partial(_eval_genomes, eval_single_genome), n=MAX_GENS)
 
     # Display the winning genome.
     print('\nBest genome:\n{!s}'.format(winner))
@@ -118,6 +120,7 @@ def _parse_args():
     global CHECKPOINT_PREFIX
     global n
     global SHOW_PLOTS
+    global MAX_GENS
 
     parser = argparse.ArgumentParser()
 
@@ -136,6 +139,8 @@ def _parse_args():
 
     parser.add_argument('-p', nargs='?', type=bool, default=False, help='Show plots')
 
+    parser.add_argument('-g', nargs='?', type=int, default=MAX_GENS, help='Max number of generations to simulate')
+
     command_line_args = parser.parse_args()
 
     NUM_WORKERS = command_line_args.workers
@@ -147,6 +152,8 @@ def _parse_args():
     n = command_line_args.n
 
     SHOW_PLOTS = command_line_args.p
+
+    MAX_GENS = command_line_args.g
 
     return command_line_args
 
