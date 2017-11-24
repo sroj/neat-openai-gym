@@ -12,6 +12,7 @@ __pycache__/
 *.cp
 
 cp_*
+*.svg
 
 # No Intellij stuff
 .idea/
