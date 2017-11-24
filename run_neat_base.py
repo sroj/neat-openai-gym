@@ -6,6 +6,8 @@ import gym
 import neat
 from neat.parallel import ParallelEvaluator
 
+import visualize
+
 n = 1
 
 test_n = 100
@@ -15,8 +17,11 @@ ENVIRONMENT_NAME = None
 CONFIG_FILENAME = None
 
 NUM_WORKERS = 1
-CHECKPOINT_GENERATION_INTERVAL = 10
+CHECKPOINT_GENERATION_INTERVAL = 1
 CHECKPOINT_PREFIX = None
+SHOW_PLOTS = False
+
+PLOT_FILENAME_PREFIX = None
 
 env = None
 
@@ -98,12 +103,21 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
 
     print("Average reward was: {}".format(avg_reward))
 
+    if SHOW_PLOTS:
+        print("Plotting stats...")
+        visualize.draw_net(config, winner, True, node_names=None, filename=PLOT_FILENAME_PREFIX + "net.svg")
+        visualize.plot_stats(stats, ylog=False, view=True, filename=PLOT_FILENAME_PREFIX + "fitness.svg")
+        visualize.plot_species(stats, view=True, filename=PLOT_FILENAME_PREFIX + "species.svg")
+
+    print("Finishing...")
+
 
 def _parse_args():
     global NUM_WORKERS
     global CHECKPOINT_GENERATION_INTERVAL
     global CHECKPOINT_PREFIX
     global n
+    global SHOW_PLOTS
 
     parser = argparse.ArgumentParser()
 
@@ -120,6 +134,8 @@ def _parse_args():
 
     parser.add_argument('-n', nargs='?', type=int, default=n, help='Number of episodes to train on')
 
+    parser.add_argument('-p', nargs='?', type=bool, default=False, help='Show plots')
+
     command_line_args = parser.parse_args()
 
     NUM_WORKERS = command_line_args.workers
@@ -130,6 +146,8 @@ def _parse_args():
 
     n = command_line_args.n
 
+    SHOW_PLOTS = command_line_args.p
+
     return command_line_args
 
 
@@ -139,6 +157,7 @@ def run(eval_network, eval_single_genome, environment_name, config_filename):
     global env
     global config
     global CHECKPOINT_PREFIX
+    global PLOT_FILENAME_PREFIX
 
     ENVIRONMENT_NAME = environment_name
     CONFIG_FILENAME = config_filename
@@ -156,5 +175,9 @@ def run(eval_network, eval_single_genome, environment_name, config_filename):
     if CHECKPOINT_PREFIX is None:
         timestamp = datetime.datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S')
         CHECKPOINT_PREFIX = "cp_" + environment_name.lower() + "_" + timestamp + "_gen_"
+
+    if PLOT_FILENAME_PREFIX is None:
+        timestamp = datetime.datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S')
+        PLOT_FILENAME_PREFIX = "plot_" + environment_name.lower() + "_" + timestamp + "_"
 
     _run_neat(checkpoint, eval_network, eval_single_genome)
