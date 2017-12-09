@@ -4,7 +4,7 @@ import run_neat_base
 
 
 def eval_network(net, net_input):
-    assert (len(net_input == 2))
+    assert (len(net_input) == 2)
 
     result = net.activate(net_input)
 
@@ -49,7 +49,7 @@ def main():
     run_neat_base.run(eval_network,
                       eval_single_genome,
                       environment_name="MountainCarContinuous-v0",
-                      config_filename="config-mountain-car")
+                      config_filename="config-mountain-car-no-neat")
 
 
 if __name__ == '__main__':

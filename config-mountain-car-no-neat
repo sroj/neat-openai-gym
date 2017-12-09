@@ -31,22 +31,27 @@ compatibility_disjoint_coefficient = 1.0
 compatibility_weight_coefficient   = 0.5
 
 # connection add/remove rates
-conn_add_prob           = 0.5
-conn_delete_prob        = 0.5
+# NO_NEAT
+conn_add_prob           = 0.0
+conn_delete_prob        = 0.0
 
 # connection enable options
+# NO_NEAT
 enabled_default         = True
-enabled_mutate_rate     = 0.01
+enabled_mutate_rate     = 0.0
 
 feed_forward            = True
-initial_connection      = full
+# NO_NEAT
+initial_connection      = full_nodirect
 
 # node add/remove rates
-node_add_prob           = 0.2
-node_delete_prob        = 0.2
+# NO_NEAT
+node_add_prob           = 0.0
+node_delete_prob        = 0.0
 
 # network parameters
-num_hidden              = 0
+# NO_NEAT
+num_hidden              = 4
 num_inputs              = 2
 num_outputs             = 1
 
@@ -69,7 +74,8 @@ weight_mutate_rate      = 0.8
 weight_replace_rate     = 0.1
 
 [DefaultSpeciesSet]
-compatibility_threshold = 3.0
+# NO_NEAT
+compatibility_threshold = 5.0
 
 [DefaultStagnation]
 species_fitness_func = max
