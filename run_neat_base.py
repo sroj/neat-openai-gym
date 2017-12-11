@@ -82,7 +82,7 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
 
         while not done:
 
-            # env.render()
+            env.render()
 
             observation, reward, done, info = env.step(action)
 
