@@ -23,6 +23,7 @@ SHOW_PLOTS = False
 
 PLOT_FILENAME_PREFIX = None
 MAX_GENS = None
+RENDER_TESTS = False
 
 env = None
 
@@ -42,6 +43,8 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
     print("Running with {} episodes per genome".format(n))
     print("Running with checkpoint prefix: {}".format(CHECKPOINT_PREFIX))
     print("Running with {} max generations".format(MAX_GENS))
+    print("Running with test rendering: {}".format(RENDER_TESTS))
+    print("Running with config file: {}".format(CONFIG_FILENAME))
 
     if checkpoint is not None:
         print("Resuming from checkpoint: {}".format(checkpoint))
@@ -82,7 +85,8 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
 
         while not done:
 
-            env.render()
+            if RENDER_TESTS:
+                env.render()
 
             observation, reward, done, info = env.step(action)
 
@@ -121,6 +125,8 @@ def _parse_args():
     global n
     global SHOW_PLOTS
     global MAX_GENS
+    global CONFIG_FILENAME
+    global RENDER_TESTS
 
     parser = argparse.ArgumentParser()
 
@@ -141,6 +147,10 @@ def _parse_args():
 
     parser.add_argument('-g', nargs='?', type=int, default=MAX_GENS, help='Max number of generations to simulate')
 
+    parser.add_argument('--config', nargs='?', default=CONFIG_FILENAME, help='Configuration filename')
+
+    parser.add_argument('--render_tests', nargs='?', type=bool, default=RENDER_TESTS, help='Whether to render the test runs')
+
     command_line_args = parser.parse_args()
 
     NUM_WORKERS = command_line_args.workers
@@ -148,6 +158,10 @@ def _parse_args():
     CHECKPOINT_GENERATION_INTERVAL = command_line_args.gi
 
     CHECKPOINT_PREFIX = command_line_args.checkpoint_prefix
+
+    CONFIG_FILENAME = command_line_args.config
+
+    RENDER_TESTS = command_line_args.render_tests
 
     n = command_line_args.n
 
