@@ -19,7 +19,7 @@ CONFIG_FILENAME = None
 NUM_WORKERS = 1
 CHECKPOINT_GENERATION_INTERVAL = 1
 CHECKPOINT_PREFIX = None
-SHOW_PLOTS = False
+GENERATE_PLOTS = False
 
 PLOT_FILENAME_PREFIX = None
 MAX_GENS = None
@@ -109,7 +109,7 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
 
     print("Average reward was: {}".format(avg_reward))
 
-    if SHOW_PLOTS:
+    if GENERATE_PLOTS:
         print("Plotting stats...")
         visualize.draw_net(config, winner, True, node_names=None, filename=PLOT_FILENAME_PREFIX + "net.svg")
         visualize.plot_stats(stats, ylog=False, view=True, filename=PLOT_FILENAME_PREFIX + "fitness.svg")
@@ -123,7 +123,7 @@ def _parse_args():
     global CHECKPOINT_GENERATION_INTERVAL
     global CHECKPOINT_PREFIX
     global n
-    global SHOW_PLOTS
+    global GENERATE_PLOTS
     global MAX_GENS
     global CONFIG_FILENAME
     global RENDER_TESTS
@@ -143,7 +143,7 @@ def _parse_args():
 
     parser.add_argument('-n', nargs='?', type=int, default=n, help='Number of episodes to train on')
 
-    parser.add_argument('-p', nargs='?', type=bool, default=False, help='Show plots')
+    parser.add_argument('--generate_plots', nargs='?', type=bool, default=GENERATE_PLOTS, help='Show plots')
 
     parser.add_argument('-g', nargs='?', type=int, default=MAX_GENS, help='Max number of generations to simulate')
 
@@ -166,7 +166,7 @@ def _parse_args():
 
     n = command_line_args.n
 
-    SHOW_PLOTS = command_line_args.p
+    GENERATE_PLOTS = command_line_args.generate_plots
 
     MAX_GENS = command_line_args.g
 
