@@ -111,7 +111,7 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
 
     if GENERATE_PLOTS:
         print("Plotting stats...")
-        visualize.draw_net(config, winner, True, node_names=None, filename=PLOT_FILENAME_PREFIX + "net.svg")
+        visualize.draw_net(config, winner, True, node_names=None, filename=PLOT_FILENAME_PREFIX + "net")
         visualize.plot_stats(stats, ylog=False, view=True, filename=PLOT_FILENAME_PREFIX + "fitness.svg")
         visualize.plot_species(stats, view=True, filename=PLOT_FILENAME_PREFIX + "species.svg")
 
