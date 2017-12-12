@@ -48,8 +48,7 @@ def eval_network(net, net_input):
 def main():
     run_neat_base.run(eval_network,
                       eval_single_genome,
-                      environment_name="CartPole-v1",
-                      config_filename="config-cart-pole")
+                      environment_name="CartPole-v1")
 
 
 if __name__ == '__main__':

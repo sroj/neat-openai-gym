@@ -46,8 +46,7 @@ def eval_single_genome(genome, genome_config):
 def main():
     run_neat_base.run(eval_network,
                       eval_single_genome,
-                      environment_name="BipedalWalker-v2",
-                      config_filename="config-bipedal-walker")
+                      environment_name="BipedalWalker-v2")
 
 
 if __name__ == '__main__':

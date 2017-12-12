@@ -149,7 +149,8 @@ def _parse_args():
 
     parser.add_argument('--config', nargs='?', default=CONFIG_FILENAME, help='Configuration filename')
 
-    parser.add_argument('--render_tests', nargs='?', type=bool, default=RENDER_TESTS, help='Whether to render the test runs')
+    parser.add_argument('--render_tests', nargs='?', type=bool, default=RENDER_TESTS,
+                        help='Whether to render the test runs')
 
     command_line_args = parser.parse_args()
 
@@ -172,7 +173,7 @@ def _parse_args():
     return command_line_args
 
 
-def run(eval_network, eval_single_genome, environment_name, config_filename):
+def run(eval_network, eval_single_genome, environment_name):
     global ENVIRONMENT_NAME
     global CONFIG_FILENAME
     global env
@@ -181,17 +182,16 @@ def run(eval_network, eval_single_genome, environment_name, config_filename):
     global PLOT_FILENAME_PREFIX
 
     ENVIRONMENT_NAME = environment_name
-    CONFIG_FILENAME = config_filename
 
     env = gym.make(ENVIRONMENT_NAME)
-
-    config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
-                         neat.DefaultSpeciesSet, neat.DefaultStagnation,
-                         CONFIG_FILENAME)
 
     command_line_args = _parse_args()
 
     checkpoint = command_line_args.checkpoint
+
+    config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
+                         neat.DefaultSpeciesSet, neat.DefaultStagnation,
+                         CONFIG_FILENAME)
 
     if CHECKPOINT_PREFIX is None:
         timestamp = datetime.datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S')

@@ -50,8 +50,7 @@ def eval_single_genome(genome, genome_config):
 def main():
     run_neat_base.run(eval_network,
                       eval_single_genome,
-                      environment_name="MountainCar-v0",
-                      config_filename="config-mountain-car-discrete")
+                      environment_name="MountainCar-v0")
 
 
 if __name__ == '__main__':
