@@ -195,10 +195,10 @@ def run(eval_network, eval_single_genome, environment_name):
 
     if CHECKPOINT_PREFIX is None:
         timestamp = datetime.datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S')
-        CHECKPOINT_PREFIX = "cp_" + environment_name.lower() + "_" + timestamp + "_gen_"
+        CHECKPOINT_PREFIX = "cp_" + CONFIG_FILENAME.lower() + "_" + timestamp + "_gen_"
 
     if PLOT_FILENAME_PREFIX is None:
         timestamp = datetime.datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S')
-        PLOT_FILENAME_PREFIX = "plot_" + environment_name.lower() + "_" + timestamp + "_"
+        PLOT_FILENAME_PREFIX = "plot_" + CONFIG_FILENAME.lower() + "_" + timestamp + "_"
 
     _run_neat(checkpoint, eval_network, eval_single_genome)
