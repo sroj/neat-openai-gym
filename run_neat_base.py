@@ -45,6 +45,7 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
     print("Running with {} max generations".format(MAX_GENS))
     print("Running with test rendering: {}".format(RENDER_TESTS))
     print("Running with config file: {}".format(CONFIG_FILENAME))
+    print("Running with generate_plots: {}".format(GENERATE_PLOTS))
 
     if checkpoint is not None:
         print("Resuming from checkpoint: {}".format(checkpoint))
@@ -143,14 +144,13 @@ def _parse_args():
 
     parser.add_argument('-n', nargs='?', type=int, default=n, help='Number of episodes to train on')
 
-    parser.add_argument('--generate_plots', nargs='?', type=bool, default=GENERATE_PLOTS, help='Show plots')
+    parser.add_argument('--generate_plots', dest='generate_plots', default=False, action='store_true')
 
     parser.add_argument('-g', nargs='?', type=int, default=MAX_GENS, help='Max number of generations to simulate')
 
     parser.add_argument('--config', nargs='?', default=CONFIG_FILENAME, help='Configuration filename')
 
-    parser.add_argument('--render_tests', nargs='?', type=bool, default=RENDER_TESTS,
-                        help='Whether to render the test runs')
+    parser.add_argument('--render_tests', dest='render_tests', default=False, action='store_true')
 
     command_line_args = parser.parse_args()
 
