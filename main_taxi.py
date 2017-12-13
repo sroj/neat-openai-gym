@@ -4,13 +4,6 @@ import numpy as np
 import run_neat_base
 
 
-def eval_network(net, net_input):
-    net_input_array = np.zeros(16)
-    net_input_array[net_input] = 1
-    activation = net.activate(net_input_array)
-    return np.argmax(activation)
-
-
 def eval_single_genome(genome, genome_config):
     net = neat.nn.FeedForwardNetwork.create(genome, genome_config)
     total_reward = 0.0
@@ -19,34 +12,43 @@ def eval_single_genome(genome, genome_config):
         # print("--> Starting new episode")
         observation = run_neat_base.env.reset()
 
-        done = False
+        action = eval_network(net, observation)
 
-        t = 0
+        done = False
 
         while not done:
 
-            # run_neat_base.env.render()
-            action = eval_network(net, observation)
+            # env.render()
 
             observation, reward, done, info = run_neat_base.env.step(action)
 
             # print("\t Reward {}: {}".format(t, reward))
-            # print("\t Action {}: {}".format(t, action))
+
+            action = eval_network(net, observation)
+
             total_reward += reward
 
-            t += 1
-
             if done:
-                # print("<-- Episode finished after {} timesteps with reward {}".format(t + 1, genome.fitness))
+                # print("<-- Episode finished after {} timesteps".format(t + 1))
                 break
 
     return total_reward / run_neat_base.n
 
 
+def eval_network(net, net_input):
+    assert (len(net_input == 4))
+
+    result = np.argmax(net.activate(net_input))
+
+    assert (result == 0 or result == 1)
+
+    return result
+
+
 def main():
     run_neat_base.run(eval_network,
                       eval_single_genome,
-                      environment_name="FrozenLake-v0")
+                      environment_name="Taxi-v2")
 
 
 if __name__ == '__main__':
