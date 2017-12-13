@@ -4,6 +4,7 @@ from functools import partial
 
 import gym
 import neat
+import numpy as np
 from neat.parallel import ParallelEvaluator
 
 import visualize
@@ -11,6 +12,7 @@ import visualize
 n = 1
 
 test_n = 100
+TEST_MULTIPLIER = 1
 T_STEPS = 10000
 
 ENVIRONMENT_NAME = None
@@ -46,6 +48,7 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
     print("Running with test rendering: {}".format(RENDER_TESTS))
     print("Running with config file: {}".format(CONFIG_FILENAME))
     print("Running with generate_plots: {}".format(GENERATE_PLOTS))
+    print("Running with test multiplier: {}".format(TEST_MULTIPLIER))
 
     if checkpoint is not None:
         print("Resuming from checkpoint: {}".format(checkpoint))
@@ -70,19 +73,22 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
 
     net = neat.nn.FeedForwardNetwork.create(winner, config)
 
-    avg_reward = 0
+    reward_goal = config.fitness_threshold
 
-    for i in range(test_n):
+    print("Testing genome with target average reward of: {}".format(reward_goal))
+
+    rewards = np.zeros(test_n)
+
+    for i in range(test_n * TEST_MULTIPLIER):
+
         print("--> Starting test episode trial {}".format(i + 1))
         observation = env.reset()
-
         action = eval_network(net, observation)
 
-        reward_episode = 0
-
         done = False
-
         t = 0
+
+        reward_episode = 0
 
         while not done:
 
@@ -106,9 +112,14 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
                 print("<-- Test episode done after {} time steps with reward {}".format(t + 1, reward_episode))
                 pass
 
-        avg_reward += reward_episode / test_n
+        rewards[i % test_n] = reward_episode
 
-    print("Average reward was: {}".format(avg_reward))
+        if i + 1 >= test_n:
+            average_reward = np.mean(rewards)
+            print("Average reward for episode {} is {}".format(i + 1, average_reward))
+            if average_reward >= reward_goal:
+                print("Hit the desired average reward in {} episodes".format(i + 1))
+                break
 
     if GENERATE_PLOTS:
         print("Plotting stats...")
@@ -128,6 +139,7 @@ def _parse_args():
     global MAX_GENS
     global CONFIG_FILENAME
     global RENDER_TESTS
+    global TEST_MULTIPLIER
 
     parser = argparse.ArgumentParser()
 
@@ -138,6 +150,8 @@ def _parse_args():
 
     parser.add_argument('--gi', nargs='?', type=int, default=CHECKPOINT_GENERATION_INTERVAL,
                         help='Maximum number of generations between save intervals')
+
+    parser.add_argument('--test_multiplier', nargs='?', type=int, default=TEST_MULTIPLIER)
 
     parser.add_argument('--checkpoint-prefix', nargs='?', default=CHECKPOINT_PREFIX,
                         help='Prefix for the filename (the end will be the generation number)')
@@ -169,6 +183,8 @@ def _parse_args():
     GENERATE_PLOTS = command_line_args.generate_plots
 
     MAX_GENS = command_line_args.g
+
+    TEST_MULTIPLIER = command_line_args.test_multiplier
 
     return command_line_args
 
