@@ -14,6 +14,7 @@ n = 1
 test_n = 100
 TEST_MULTIPLIER = 1
 T_STEPS = 10000
+TEST_REWARD_THRESHOLD = None
 
 ENVIRONMENT_NAME = None
 CONFIG_FILENAME = None
@@ -49,6 +50,7 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
     print("Running with config file: {}".format(CONFIG_FILENAME))
     print("Running with generate_plots: {}".format(GENERATE_PLOTS))
     print("Running with test multiplier: {}".format(TEST_MULTIPLIER))
+    print("Running with test reward threshold of: {}".format(TEST_REWARD_THRESHOLD))
 
     if checkpoint is not None:
         print("Resuming from checkpoint: {}".format(checkpoint))
@@ -73,7 +75,7 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
 
     net = neat.nn.FeedForwardNetwork.create(winner, config)
 
-    reward_goal = config.fitness_threshold
+    reward_goal = config.fitness_threshold if not TEST_REWARD_THRESHOLD else TEST_REWARD_THRESHOLD
 
     print("Testing genome with target average reward of: {}".format(reward_goal))
 
@@ -140,6 +142,7 @@ def _parse_args():
     global CONFIG_FILENAME
     global RENDER_TESTS
     global TEST_MULTIPLIER
+    global TEST_REWARD_THRESHOLD
 
     parser = argparse.ArgumentParser()
 
@@ -152,6 +155,8 @@ def _parse_args():
                         help='Maximum number of generations between save intervals')
 
     parser.add_argument('--test_multiplier', nargs='?', type=int, default=TEST_MULTIPLIER)
+
+    parser.add_argument('--test_reward_threshold', nargs='?', type=float, default=TEST_REWARD_THRESHOLD)
 
     parser.add_argument('--checkpoint-prefix', nargs='?', default=CHECKPOINT_PREFIX,
                         help='Prefix for the filename (the end will be the generation number)')
@@ -185,6 +190,8 @@ def _parse_args():
     MAX_GENS = command_line_args.g
 
     TEST_MULTIPLIER = command_line_args.test_multiplier
+
+    TEST_REWARD_THRESHOLD = command_line_args.test_reward_threshold
 
     return command_line_args
 
