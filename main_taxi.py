@@ -36,13 +36,10 @@ def eval_single_genome(genome, genome_config):
 
 
 def eval_network(net, net_input):
-    assert (len(net_input == 4))
+    net_input_array = np.zeros(500)
+    net_input_array[net_input] = 1
 
-    result = np.argmax(net.activate(net_input))
-
-    assert (result == 0 or result == 1)
-
-    return result
+    return np.argmax(net.activate(net_input_array))
 
 
 def main():
