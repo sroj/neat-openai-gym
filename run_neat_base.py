@@ -42,15 +42,7 @@ def _eval_genomes(eval_single_genome, genomes, neat_config):
 def _run_neat(checkpoint, eval_network, eval_single_genome):
     # Create the population, which is the top-level object for a NEAT run.
 
-    print("Running with {} workers".format(NUM_WORKERS))
-    print("Running with {} episodes per genome".format(n))
-    print("Running with checkpoint prefix: {}".format(CHECKPOINT_PREFIX))
-    print("Running with {} max generations".format(MAX_GENS))
-    print("Running with test rendering: {}".format(RENDER_TESTS))
-    print("Running with config file: {}".format(CONFIG_FILENAME))
-    print("Running with generate_plots: {}".format(GENERATE_PLOTS))
-    print("Running with test multiplier: {}".format(TEST_MULTIPLIER))
-    print("Running with test reward threshold of: {}".format(TEST_REWARD_THRESHOLD))
+    print_config_info()
 
     if checkpoint is not None:
         print("Resuming from checkpoint: {}".format(checkpoint))
@@ -75,6 +67,22 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
 
     net = neat.nn.FeedForwardNetwork.create(winner, config)
 
+    test_genome(eval_network, net)
+
+    generate_stat_plots(stats, winner)
+
+    print("Finishing...")
+
+
+def generate_stat_plots(stats, winner):
+    if GENERATE_PLOTS:
+        print("Plotting stats...")
+        visualize.draw_net(config, winner, True, node_names=None, filename=PLOT_FILENAME_PREFIX + "net")
+        visualize.plot_stats(stats, ylog=False, view=True, filename=PLOT_FILENAME_PREFIX + "fitness.svg")
+        visualize.plot_species(stats, view=True, filename=PLOT_FILENAME_PREFIX + "species.svg")
+
+
+def test_genome(eval_network, net):
     reward_goal = config.fitness_threshold if not TEST_REWARD_THRESHOLD else TEST_REWARD_THRESHOLD
 
     print("Testing genome with target average reward of: {}".format(reward_goal))
@@ -123,13 +131,17 @@ def _run_neat(checkpoint, eval_network, eval_single_genome):
                 print("Hit the desired average reward in {} episodes".format(i + 1))
                 break
 
-    if GENERATE_PLOTS:
-        print("Plotting stats...")
-        visualize.draw_net(config, winner, True, node_names=None, filename=PLOT_FILENAME_PREFIX + "net")
-        visualize.plot_stats(stats, ylog=False, view=True, filename=PLOT_FILENAME_PREFIX + "fitness.svg")
-        visualize.plot_species(stats, view=True, filename=PLOT_FILENAME_PREFIX + "species.svg")
 
-    print("Finishing...")
+def print_config_info():
+    print("Running with {} workers".format(NUM_WORKERS))
+    print("Running with {} episodes per genome".format(n))
+    print("Running with checkpoint prefix: {}".format(CHECKPOINT_PREFIX))
+    print("Running with {} max generations".format(MAX_GENS))
+    print("Running with test rendering: {}".format(RENDER_TESTS))
+    print("Running with config file: {}".format(CONFIG_FILENAME))
+    print("Running with generate_plots: {}".format(GENERATE_PLOTS))
+    print("Running with test multiplier: {}".format(TEST_MULTIPLIER))
+    print("Running with test reward threshold of: {}".format(TEST_REWARD_THRESHOLD))
 
 
 def _parse_args():
