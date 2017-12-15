@@ -133,6 +133,7 @@ def test_genome(eval_network, net):
 
 
 def print_config_info():
+    print("Running environment: {}".format(env.spec.id))
     print("Running with {} workers".format(NUM_WORKERS))
     print("Running with {} episodes per genome".format(n))
     print("Running with checkpoint prefix: {}".format(CHECKPOINT_PREFIX))
