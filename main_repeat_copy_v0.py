@@ -9,11 +9,19 @@ def eval_network(net, net_input):
     net_input_array[net_input] = 1
     activation = net.activate(net_input_array)
 
-    slice1 = activation[0:2]
-    slice2 = activation[2:4]
-    slice3 = activation[4:9]
+    # slice1 = activation[0:2]
+    # slice2 = activation[2:4]
+    # slice3 = activation[4:9]
 
-    return [np.argmax(slice1), np.argmax(slice2), np.argmax(slice3)]
+    maxarg = np.argmax(activation)
+
+    d2 = maxarg // 10
+
+    d1 = (maxarg % 10) // 5
+
+    d0 = (maxarg % 10) % 5
+
+    return [d2, d1, d0]
 
 
 def eval_single_genome(genome, genome_config):
@@ -33,16 +41,19 @@ def eval_single_genome(genome, genome_config):
             # run_neat_base.env.render()
             action = eval_network(net, observation)
 
+            # print("\t Observation {}: {}".format(t, observation))
+
             observation, reward, done, info = run_neat_base.env.step(action)
 
-            # print("\t Reward {}: {}".format(t, reward))
             # print("\t Action {}: {}".format(t, action))
+            # print("\t Reward {}: {}".format(t, reward))
+
             total_reward += reward
 
             t += 1
 
             if done:
-                # print("<-- Episode finished after {} timesteps with reward {}".format(t + 1, genome.fitness))
+                # print("<-- Episode finished after {} timesteps with reward {}".format(t + 1, total_reward))
                 break
 
     return total_reward / run_neat_base.n
