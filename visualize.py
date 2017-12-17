@@ -14,6 +14,8 @@ def plot_stats(statistics, ylog=False, view=False, filename='avg_fitness.svg'):
         warnings.warn("This display is not available due to a missing optional dependency (matplotlib)")
         return
 
+    plt.ioff()
+
     generation = range(len(statistics.most_fit_genomes))
     best_fitness = [c.fitness for c in statistics.most_fit_genomes]
     avg_fitness = np.array(statistics.get_fitness_mean())
@@ -93,6 +95,8 @@ def plot_species(statistics, view=False, filename='speciation.svg'):
     if plt is None:
         warnings.warn("This display is not available due to a missing optional dependency (matplotlib)")
         return
+
+    plt.ioff()
 
     species_sizes = statistics.get_species_sizes()
     num_generations = len(species_sizes)
