@@ -5,7 +5,7 @@ import run_neat_base
 
 
 def eval_single_genome(genome, genome_config):
-    net = neat.nn.FeedForwardNetwork.create(genome, genome_config)
+    net = neat.nn.RecurrentNetwork.create(genome, genome_config)
     total_reward = 0.0
 
     for i in range(run_neat_base.n):
@@ -36,13 +36,7 @@ def eval_single_genome(genome, genome_config):
 
 
 def eval_network(net, net_input):
-    assert len(net_input) == 4
-
-    result = np.argmax(net.activate(net_input))
-
-    assert result in range(0, 3)
-
-    return result
+    return np.argmax(net.activate(net_input))
 
 
 def main():
