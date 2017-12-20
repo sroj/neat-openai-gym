@@ -36,7 +36,7 @@ def eval_single_genome(genome, genome_config):
 
 
 def eval_network(net, net_input):
-    return net.activate(net_input)
+    return [(net.activate(net_input)[0] - 0.5) * 4]
 
 
 def main():
