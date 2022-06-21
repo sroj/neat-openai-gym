@@ -9,7 +9,7 @@ gym==0.9.4
 idna==2.6
 matplotlib==2.0.2
 neat-python==0.92
-numpy==1.13.3
+numpy==1.22.0
 olefile==0.44
 Pillow==4.3.0
 -e git+https://github.com/ntasfi/PyGame-Learning-Environment.git@50aa299a3b519029f3fd123b4cce6d34edbfa0dc#egg=ple
